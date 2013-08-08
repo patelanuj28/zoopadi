@@ -14,5 +14,6 @@ urlpatterns = patterns('',
     url(r'^admin/logout/', 'django.contrib.auth.views.logout',{'next_page': '/admin/'}),
 
     # Uncomment the next line to enable the admin:
+    (r'^tinymce/', include('tinymce.urls')),
     url(r'^admin/', include(admin.site.urls)),
 )

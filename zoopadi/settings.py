@@ -1,6 +1,9 @@
 # Django settings for zoopadi project.
 import os.path
 PROJECT_DIR = os.path.dirname(__file__)
+import djcelery
+djcelery.setup_loader()
+BROKER_URL = 'amqp://guest:guest@localhost:5672/'
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -119,6 +122,17 @@ TEMPLATE_DIRS = (
 	'/Users/patelanuj28/workspace/python/django/zoopadi/templates',
 )
 
+WPADMIN = {
+    'admin': {
+        'menu': {
+            'top': 'wpadmin.menu.menus.TopMenu',
+            'left': 'wpadmin.menu.menus.LeftMenu',
+        }
+    },
+}
+
+
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -126,12 +140,14 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'tinymce',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
     'property',
-    'djfrontend',
+    'djfrontend',    
+    'djcelery',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -163,10 +179,31 @@ LOGGING = {
     }
 }
 
-try:
-    import djcelery
-    djcelery.setup_loader()
-    BROKER_URL = 'amqp://guest:guest@localhost:5672/'
-    INSTALLED_APPS.append('djcelery')
-except: 
-    pass
+
+
+TEMPLATE_CONTEXT_PROCESSORS = ("django.contrib.auth.context_processors.auth",
+        "django.core.context_processors.debug",
+        "django.core.context_processors.i18n",
+        "django.core.context_processors.media",
+        "django.core.context_processors.static",
+        "django.core.context_processors.tz",
+        "django.contrib.messages.context_processors.messages",
+        "django.core.context_processors.request",
+    )
+
+
+'''
+TINYMCE EDITOR not working correctly with below configuration
+
+TINYMCE_JS_URL = os.path.join(MEDIA_ROOT, "admin/tinymce/tinymce.min.js")
+TINYMCE_JS_ROOT = os.path.join(MEDIA_ROOT, "admin/tinymce/")
+TINYMCE_DEFAULT_CONFIG = {
+    'plugins': "table,spellchecker,paste,searchreplace",
+    'theme': "advanced",
+    'cleanup_on_startup': True,
+    'custom_undo_redo_levels': 10,
+}
+TINYMCE_SPELLCHECKER = True
+TINYMCE_COMPRESSOR = True
+
+'''
